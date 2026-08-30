@@ -31,6 +31,9 @@
   ::selection { background: #FFFFFF; color: #050505; }
   @keyframes ol-float { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-9px) rotate(2deg); } }
   @keyframes ol-logo { 0%, 100% { transform: translateY(0) rotate(-0.5deg) scale(1); } 50% { transform: translateY(-8px) rotate(0.5deg) scale(1.01); } }
+  @keyframes ol-boing { 0% { transform: scale(1) rotate(0deg); } 18% { transform: scale(1.14, 0.84) rotate(-5deg); } 42% { transform: scale(0.9, 1.12) rotate(6deg); } 66% { transform: scale(1.06, 0.96) rotate(-3deg); } 100% { transform: scale(1) rotate(0deg); } }
+  @keyframes ol-boing-b { 0% { transform: scale(1) rotate(0deg); } 18% { transform: scale(1.14, 0.84) rotate(5deg); } 42% { transform: scale(0.9, 1.12) rotate(-6deg); } 66% { transform: scale(1.06, 0.96) rotate(3deg); } 100% { transform: scale(1) rotate(0deg); } }
+  @keyframes ol-pop { 0% { opacity: 0; transform: translate(0,0) scale(0.4); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.25) rotate(var(--rot)); } }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
 </helmet>
@@ -38,10 +41,17 @@
 <div style="min-height:100vh;display:flex;flex-direction:column;background:#050505">
 
   <section style="position:relative;padding:clamp(30px,7vw,72px) clamp(14px,4vw,44px) clamp(34px,5vw,62px);overflow:hidden">
-    <div style="position:absolute;left:50%;top:-30%;width:min(1100px,120%);height:120%;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.09), rgba(255,255,255,0) 62%)"></div>
+    <div style="position:absolute;inset:0;background-image:url('assets/waves-bg.png');background-size:cover;background-position:center top;opacity:0.8;-webkit-mask-image:linear-gradient(180deg, #000 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.45) 58%, rgba(0,0,0,0) 82%);mask-image:linear-gradient(180deg, #000 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.45) 58%, rgba(0,0,0,0) 82%)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(5,5,5,0.68) 0%, rgba(5,5,5,0.82) 45%, rgba(5,5,5,0.95) 75%, #050505 100%)"></div>
 
     <div style="position:relative;max-width:1180px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(20px,3vw,32px)">
-      <img src="assets/logo.png" alt="okLOLbye" style="display:block;width:100%;max-width:920px;height:auto;filter:drop-shadow(0 22px 40px rgba(0,0,0,0.85));animation:ol-logo 7s ease-in-out infinite" />
+      <div onClick="{{ onPoke }}" style="position:relative;width:100%;max-width:920px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none">
+        <img src="assets/logo.png" alt="okLOLbye" draggable="false" style="display:block;width:100%;height:auto;filter:drop-shadow(0 22px 40px rgba(0,0,0,0.85));transform-origin:{{ logoOrigin }};animation:{{ logoAnim }}" />
+        {{ sparks }}
+        <sc-if value="{{ line }}" hint-placeholder-val="{{ false }}">
+          <span style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);padding:9px 18px;border-radius:999px;background:{{ lineBg }};color:{{ lineFg }};font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(13px,3.4vw,17px);white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;box-shadow:0 10px 26px rgba(0,0,0,0.6)">{{ line }}</span>
+        </sc-if>
+      </div>
 
       <p style="margin:0;max-width:620px;font-size:clamp(16px,4.2vw,21px);line-height:1.5;font-weight:700;text-wrap:pretty;color:#A8A8A8">We make warm, slightly strange games about wandering somewhere loud. First up: <em style="font-style:italic;font-weight:900;color:#FFFFFF">Moose Migration</em>.</p>
 
@@ -59,7 +69,7 @@
     </div>
   </section>
 
-  <section style="position:relative;padding:clamp(46px,7vw,96px) clamp(14px,4vw,44px);background:#050505;border-top:1px solid rgba(255,255,255,0.1)">
+  <section style="position:relative;padding:clamp(46px,7vw,96px) clamp(14px,4vw,44px);background:#050505">
     <div style="max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(24px,4vw,38px)">
       <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px">
         <h2 style="margin:0;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(36px,9vw,78px);line-height:0.98;letter-spacing:-0.03em;color:#FFFFFF">Moose <span style="color:#FF8A1F">Migration</span></h2>
@@ -82,10 +92,12 @@
     </div>
   </section>
 
-  <section style="padding:clamp(46px,8vw,104px) clamp(14px,4vw,44px);background:#050505;border-top:1px solid rgba(255,255,255,0.1)">
-    <div style="max-width:940px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">
-      <span style="display:inline-block;padding:9px 18px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#B4B4B4;font-weight:800;font-size:clamp(11px,3vw,13px);animation:ol-float 4.5s ease-in-out infinite">scroll's over, the moose won</span>
-      <h2 style="margin:0;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(30px,7.2vw,64px);line-height:1.02;letter-spacing:-0.03em;color:#FFFFFF;text-wrap:balance">Wishlist the moose. Then <span style="color:#2B7FFF">ok</span><span style="color:#FF8A1F">LOL</span><span style="color:#A855F7">bye</span>.</h2>
+  <section style="position:relative;padding:clamp(56px,9vw,120px) clamp(14px,4vw,44px);background:#050505;overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:url('assets/stars-bg.png');background-size:cover;background-position:center;-webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 22%, #000 55%, #000 100%);mask-image:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 22%, #000 55%, #000 100%)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, #050505 0%, rgba(5,5,5,0.84) 30%, rgba(5,5,5,0.74) 60%, rgba(5,5,5,0.7) 100%)"></div>
+    <div style="position:relative;max-width:940px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">
+      <span style="display:inline-block;padding:9px 18px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);color:#B4B4B4;font-weight:800;font-size:clamp(11px,3vw,13px);animation:ol-float 4.5s ease-in-out infinite">you reached the bottom, the moose kept walking</span>
+      <h2 style="margin:0;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(30px,7.2vw,64px);line-height:1.02;letter-spacing:-0.03em;color:#FFFFFF;text-wrap:balance;text-shadow:0 4px 24px rgba(0,0,0,0.85)">scroll's over,<br /><span style="color:#2B7FFF">ok</span><span style="color:#FF8A1F">LOL</span><span style="color:#A855F7">bye</span>.</h2>
       <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%">
         <a href="https://store.steampowered.com/search/?term=Moose%20Migration" target="_blank" rel="noopener" style="padding:16px 32px;border-radius:999px;background:#2B7FFF;color:#FFFFFF;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(15px,4vw,19px);max-width:100%" style-hover="color:#FFFFFF;background:#1668E8">Wishlist on Steam</a>
         <a href="{{ mailHref }}" onClick="{{ onContact }}" style="padding:16px 32px;border-radius:999px;background:transparent;border:1.5px solid #A855F7;color:#C9A5FB;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(15px,4vw,19px);max-width:100%;overflow-wrap:anywhere" style-hover="color:#FFFFFF;background:#A855F7;border:1.5px solid #A855F7">{{ mailLabel }}</a>
@@ -101,16 +113,109 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
+const OL_LINES = [
+  'ouch.', 'ow. do it again.', 'hey! that is a load-bearing moose.', 'poke received. moose unimpressed.',
+  'that tickled, honestly.', 'stop. ok fine, continue.', 'careful, the L is structural.',
+  'you found the button. there is no prize.', 'boing.', 'oof.', 'that was my good letter.',
+  'the moose felt that.', 'again? bold.', 'i am a logo, not a toy.', 'ok that one hurt a little.',
+  'antlers are load tested, letters are not.', 'please poke the Steam button instead.',
+  'we do not have a QA team, you are it.', 'squish.', 'the eye is watching you now.',
+  'do not wake the O.', 'you have unlocked: nothing.', 'that is going in the patch notes.',
+  'the checkerboard e is fine, thanks for asking.', 'moose says: rude.',
+  'you poke like someone who wishlists things.', 'i felt that in my kerning.',
+  'now do it 97 more times.', 'ow, my baseline.', 'the peace sign forgives you.',
+  'somewhere a moose flinched.', 'this is technically vandalism.', 'gentle. GENTLE.',
+  'nope, still no secret level.', 'the lake is fine. i am fine.', 'that is one poke closer to nothing.',
+  'you are very good at clicking.', 'the tongue was not consensual.',
+  'i will tell the moose about this.', 'yes, hello, ouch.', 'i am a very serious brand.',
+  'the leopard k did not deserve that.', 'try the north. it is quieter.',
+  'we counted that poke. we count them all.', 'boop taken. boop logged.',
+  'the moose has left on foot.', 'that is enough affection for today.',
+  'the stars cost us extra, you know.', 'you clicked the y and now it is sad.',
+  'poking does not speed up development.', 'this is the fun part of the site.',
+  'careful, i just had this rendered.', 'ok you win, take the stars.',
+  'is this what marketing looks like.', 'the moose is walking. always walking.',
+  'you are the reason we have this feature.', 'that was a 7 out of 10 poke.',
+  'i have been poked worse.', 'the b is fully recovered, thanks.',
+  'do not tell the pine trees.', 'the aurora saw that.',
+  'we could have made a menu instead.', 'moose noise.', 'wobble complete.',
+  'you are hurting the vibes.', 'that is my last soft spot.',
+  'the eyeball is taking notes.', 'we should charge per poke.',
+  'this is not in the design system.', 'you and the moose are even now.',
+  'still no fail state, even here.', 'the letters unionised, by the way.',
+  'clicked with feeling. respect.', 'okay okay okay ok LOL bye.',
+  'that shook the whole studio.', 'the lake rippled a bit.',
+  'the herd heard that.', 'you have poked professionally before.',
+  'that will buff out.', 'we do not have insurance for this.',
+  'small poke, big feelings.', 'i am mostly gradient inside.',
+  'you dented the vowel.', 'a wild poke appears.',
+  'that is going on the moodboard.', 'moose migration, moose irritation.',
+  'the o is dizzy now.', 'we call that the ouch mechanic.',
+  'you are extremely persistent.', 'this is between us.',
+  'nothing north of here but more poking.', 'the checkered bit is glaring at you.',
+  'that was worth at least one wishlist.', 'you could be walking instead.',
+  'the moose does not poke back. classy.', 'ow, right in the letterforms.',
+  'we made this on purpose. sorry.', 'poke number too many.',
+  'the forest went quiet after that one.', 'fine. ok. LOL. bye.'
+];
+const OL_BUBBLES = [
+  ['#2B7FFF', '#FFFFFF'], ['#FF8A1F', '#2B1000'], ['#A855F7', '#FFFFFF'],
+  ['#FF4FC3', '#2B0018'], ['#4DE1FF', '#00252E'], ['#FFD84D', '#2B2200'],
+  ['#FFFFFF', '#050505']
+];
+
 class Component extends DCLogic {
-  state = { revealed: false };
+  state = { revealed: false, pokes: 0, line: null };
   address() {
     const user = ['o', 'l', 'l', 'e', 'h'].reverse().join('');
     const host = ['oklolbye', 'com'].join('.');
     return user + String.fromCharCode(64) + host;
   }
+  poke = (e) => {
+    const line = OL_LINES[Math.floor(Math.random() * OL_LINES.length)];
+    const box = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - box.left) / box.width) * 100;
+    const y = ((e.clientY - box.top) / box.height) * 100;
+    const bubble = OL_BUBBLES[Math.floor(Math.random() * OL_BUBBLES.length)];
+    this.setState(s => ({ pokes: s.pokes + 1, line, x, y, bg: bubble[0], fg: bubble[1] }));
+    window.clearTimeout(this._t);
+    this._t = window.setTimeout(() => this.setState({ line: null }), 1600);
+  };
+  sparkNodes() {
+    const n = this.state.pokes;
+    if (!n) return null;
+    const colors = ['#FFD84D', '#2B7FFF', '#FF8A1F', '#A855F7', '#FF4FC3', '#4DE1FF'];
+    const items = [];
+    for (let i = 0; i < 14; i++) {
+      const a = (i / 14) * Math.PI * 2 + n;
+      const dist = 90 + ((i * 37 + n * 13) % 90);
+      const size = 12 + ((i * 7 + n * 5) % 16);
+      items.push(React.createElement('span', {
+        key: n + '-' + i,
+        style: {
+          position: 'absolute', left: (this.state.x ?? 50) + '%', top: (this.state.y ?? 50) + '%', width: size, height: size,
+          marginLeft: -size / 2, marginTop: -size / 2, pointerEvents: 'none',
+          background: colors[i % colors.length],
+          clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+          '--dx': Math.cos(a) * dist + 'px',
+          '--dy': Math.sin(a) * dist * 0.75 + 'px',
+          '--rot': (i % 2 ? 220 : -220) + 'deg',
+          animation: 'ol-pop 750ms ease-out forwards'
+        }
+      }));
+    }
+    return React.createElement('span', { key: 'burst-' + n, style: { position: 'absolute', inset: 0, pointerEvents: 'none' } }, items);
+  }
   renderVals() {
     const addr = this.address();
     return {
+      onPoke: this.poke,
+      sparks: this.sparkNodes(),
+      line: this.state.line,
+      lineBg: this.state.bg || '#FFFFFF',
+      lineFg: this.state.fg || '#050505',
+      logoOrigin: (this.state.x ?? 50) + '% ' + (this.state.y ?? 50) + '%',
+      logoAnim: this.state.pokes ? (this.state.pokes % 2 ? 'ol-boing' : 'ol-boing-b') + ' 620ms ease-out 1' : 'ol-logo 7s ease-in-out infinite',
       mailHref: this.state.revealed ? 'mailto:' + addr : '#',
       mailLabel: this.state.revealed ? addr : 'Say hello',
       onContact: (e) => {
